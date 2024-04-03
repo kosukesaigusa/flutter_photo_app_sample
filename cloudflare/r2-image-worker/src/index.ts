@@ -23,7 +23,7 @@ app.get(
 )
 
 app.get('/:fileName', async (c) => {
-  const query = c.req.query('optimize')
+  const optimize = c.req.query('optimize')
   const fileName = c.req.param().fileName
 
   const object = await c.env.BUCKET.get(fileName)
@@ -32,21 +32,20 @@ app.get('/:fileName', async (c) => {
   const contentType = object.httpMetadata?.contentType ?? ''
 
   const buffer = await object.arrayBuffer()
+  let optimized: Uint8Array | null = null
+  if (optimize) {
+    optimized = await optimizeImage({
+      image: buffer,
+      // 調整する
+      width: 300,
+      // 調整する
+      quality: 75,
+    })
+  }
 
-  const image =
-    (query
-      ? await optimizeImage({
-          image: buffer,
-          // 調整する
-          width: 300,
-          // 調整する
-          quality: 75,
-        })
-      : buffer) ?? buffer
-
-  return c.body(image, 200, {
+  return c.body(optimized ?? buffer, 200, {
     'Cache-Control': `public, max-age=${maxAge}`,
-    'Content-Type': object.httpMetadata?.contentType ?? '',
+    'Content-Type': contentType,
   })
 })
 
