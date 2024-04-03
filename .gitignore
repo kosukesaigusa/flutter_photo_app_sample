@@ -45,3 +45,15 @@ app.*.map.json
 
 # FVM
 .fvm/flutter_sdk
+
+# Cloudflare
+node_modules
+dist
+.wrangler
+.dev.vars
+
+# Change them to your taste:
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+bun.lockb
