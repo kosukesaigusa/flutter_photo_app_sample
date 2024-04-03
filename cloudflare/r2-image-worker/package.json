@@ -8,7 +8,8 @@
   },
   "license": "MIT",
   "dependencies": {
-    "hono": "^3.3.1"
+    "hono": "^3.3.1",
+    "wasm-image-optimization": "^1.0.1"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.10.0",
