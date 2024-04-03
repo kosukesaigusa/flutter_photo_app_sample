@@ -1,7 +1,7 @@
 import { cache } from 'hono/cache'
 import { logger } from 'hono/logger'
 import { Hono } from 'hono/quick'
-import { optimizeImage } from 'wasm-image-optimization/*'
+import { optimizeImage } from 'wasm-image-optimization'
 
 type Bindings = {
   BUCKET: R2Bucket
