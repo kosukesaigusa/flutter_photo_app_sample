@@ -15,20 +15,21 @@ class MainApp extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final count = useState<int>(5);
+    final imagesCount = useState<int>(5);
+    final rowsCount = useState<int>(2);
     final optimize = useState<bool>(false);
     final imageSize = useState<ImageSize>(ImageSize.medium);
     return Scaffold(
       appBar: AppBar(
-        title: Text('表示件数：${count.value} 件'),
+        title: Text('表示件数：${imagesCount.value} 件'),
       ),
       body: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 5,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: rowsCount.value,
           crossAxisSpacing: 4,
           mainAxisSpacing: 4,
         ),
-        itemCount: count.value,
+        itemCount: imagesCount.value,
         itemBuilder: (context, index) {
           final imageUrl =
               'https://photo-app-sample-image-worker.saigusa758cloudy.workers.dev'
@@ -56,6 +57,23 @@ class MainApp extends HookWidget {
             ),
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          if (rowsCount.value < 5) {
+            rowsCount.value = rowsCount.value + 1;
+          } else {
+            rowsCount.value = 1;
+          }
+          ScaffoldMessenger.of(context)
+            ..removeCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Text('列数を ${rowsCount.value} に変更しました。'),
+              ),
+            );
+        },
+        child: const Icon(Icons.grid_view_rounded),
       ),
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,
@@ -108,8 +126,8 @@ class MainApp extends HookWidget {
             const VerticalDivider(),
             IconButton(
               onPressed: () {
-                if (count.value > 0) {
-                  count.value = count.value - 5;
+                if (imagesCount.value > 0) {
+                  imagesCount.value = imagesCount.value - 5;
                 } else {
                   ScaffoldMessenger.of(context)
                     ..removeCurrentSnackBar()
@@ -124,8 +142,8 @@ class MainApp extends HookWidget {
             ),
             IconButton(
               onPressed: () {
-                if (count.value < 100) {
-                  count.value = count.value + 5;
+                if (imagesCount.value < 100) {
+                  imagesCount.value = imagesCount.value + 5;
                 } else {
                   ScaffoldMessenger.of(context)
                     ..removeCurrentSnackBar()
@@ -149,7 +167,7 @@ class MainApp extends HookWidget {
                     const SnackBar(content: Text('キャッシュをクリアしました。')),
                   );
               },
-              icon: const Icon(Icons.delete),
+              icon: const Icon(Icons.cached),
             ),
           ],
         ),
